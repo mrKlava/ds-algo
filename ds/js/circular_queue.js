@@ -1,7 +1,7 @@
 class CircularQueue {
   constructor(n) {
     this.n = n
-    this.queue = Array(this.n)
+    this.queue = Array(n)
     this.front = -1
     this.rear = -1
   }
@@ -23,7 +23,7 @@ class CircularQueue {
     if (this.front === -1) {
       console.log('Queue is empty')
     } else if (this.front === this.rear) {
-      const temp = self.queue[self.front]
+      const temp = this.queue[this.front]
       this.front -= 1
       this.rear -= 1
 
@@ -31,6 +31,8 @@ class CircularQueue {
     } else {
       const temp = this.queue[this.front]
       this.front = (this.front + 1) % this.n
+
+      return temp
     }
   }
 

@@ -1,0 +1,31 @@
+.main {
+   
+    width: 100%;
+}
+
+.queue {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    background-color: bisque;
+    width: 100%;
+}
+
+.queue-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    width: 80px;
+    height: 160px;
+    border: 1px solid #000;
+}
+
+.item {
+    width: 50px;
+    background-color: rgb(153, 197, 123);
+
+    text-align: center;
+}
