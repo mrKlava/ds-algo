@@ -1,5 +1,7 @@
 "use strict"
 
+/* HELPERS */
+
 const getId = (id) => document.getElementById(id)
 const createElem = (elem) => document.createElement(elem)
 
@@ -85,105 +87,95 @@ class UI {
         this.enqueueBtn = getId('enqueue')
         this.dequeueBtn = getId('dequeue')
     }
+
+    createUi(n) {
+        const queue = new CircularQueue(n)
+
+        this.renderSlots(queue)
+        this.renderItems(queue)
+
+        return queue
+    }
+
+    handleEnqueue(queue) {
+        const value = itemValue.value ? itemValue.value : Math.ceil(Math.random() * 100)
+        const priority = itemPriority.value ? itemPriority.value : 1
+        const time = itemTime.value ? itemTime.value : 3000
+    
+        queue.enqueue(new QueueItem(value, priority, time))
+    
+        this.refreshItems(queue)
+        this.resetInput()
+    }
+
+    handleDequeue(queue) {
+        queue.dequeue()
+    
+        this.refreshItems(queue)
+    }
+
+    resetInput() {
+        this.itemValue.value = ''
+        this.itemPriority.value = ''
+        this.itemTime.value = ''
+    }
+
+    renderSlots({n}) {   
+        for (let i = 0; i < n; i++) {
+            this.queueContainer.appendChild(this.createSlot(i))
+        }
+    }
+
+    renderItems({queue}) {
+        queue.forEach((item, i) => {
+            const card = this.createItem(item)
+            this.queueContainer.children[i].appendChild(card)
+        })
+    }
+
+    refreshItems(queue) {
+        this.queueContainer.replaceChildren()
+    
+        this.renderSlots(queue)
+        this.renderItems(queue)
+    }
+
+    createSlot(i) {
+        const slot = createElem('div')
+        slot.classList.add('queue-slot')
+        slot.textContent = `INDEX ${i}`
+    
+        return slot
+    }
+
+    createItem({value, id, time}) {
+        const item = createElem('div')
+        const valueP = createElem('p')
+        const idP = createElem('p')
+        const timeP = createElem('p')
+    
+        valueP.textContent = value
+        idP.textContent = id
+        timeP.textContent = time
+    
+        item.classList.add('item')
+    
+        item.appendChild(idP)
+        item.appendChild(valueP)
+        item.appendChild(timeP)
+    
+        return item
+    }
 }
 
 /* CONSTANTS */
 
-const queueContainer = getId('queue')
-// input form
-const itemValue = getId('itemValue')
-const itemPriority = getId('itemPriority')
-const itemTime = getId('itemTime')
-// btn enqueue and dequeue
-const enqueueBtn = getId('enqueue')
-const dequeueBtn = getId('dequeue')
-
 let counter = 0
 
-const queue = new CircularQueue(25)
-
+const ui = new UI()
+const queue = ui.createUi()
 
 /* EVENT LISTENERS */
-enqueueBtn.addEventListener('click', handleEnqueue)
-dequeueBtn.addEventListener('click', handleDequeue)
 
-
-/* FUNCTION CALLS */
-
-renderSlots(queue)
-renderItems(queue)
-
-/* EVENT HANDLERS */
-
-function handleEnqueue() {
-    const value = itemValue.value ? itemValue.value : Math.ceil(Math.random() * 100)
-    const priority = itemPriority.value ? itemPriority.value : 1
-    const time = itemTime.value ? itemTime.value : 3000
-
-    queue.enqueue(new QueueItem(value, priority, time))
-
-    refreshItems(queue)
-    resetInput()
-}
-
-function handleDequeue() {
-    queue.dequeue()
-
-    refreshItems(queue)
-}
-
-
-/* HELPERS */ 
-
-function resetInput() {
-    itemValue.value = ''
-    itemPriority.value = ''
-    itemTime.value = ''
-}
-
-function renderSlots({n}) {   
-    for (let i = 0; i < n; i++) {
-        queueContainer.appendChild(createSlot(i))
-    }
-}
-
-function renderItems({queue}) {
-    queue.forEach((item, i) => {
-        const card = createCard(item)
-        queueContainer.children[i].appendChild(card)
-    })
-}
-
-function refreshItems(queue) {
-    queueContainer.replaceChildren()
-
-    renderSlots(queue)
-    renderItems(queue)
-}
-
-function createSlot(i) {
-    const slot = createElem('div')
-    slot.classList.add('queue-slot')
-    slot.textContent = `INDEX ${i}`
-
-    return slot
-}
-
-function createCard({value, id, time}) {
-    const item = createElem('div')
-    const valueP = createElem('p')
-    const idP = createElem('p')
-    const timeP = createElem('p')
-
-    valueP.textContent = value
-    idP.textContent = id
-    timeP.textContent = time
-
-    item.classList.add('item')
-
-    item.appendChild(idP)
-    item.appendChild(valueP)
-    item.appendChild(timeP)
-
-    return item
-}
+ui.enqueueBtn.addEventListener('click', () => ui.handleEnqueue(queue))
+ui.dequeueBtn.addEventListener('click', () => ui.handleDequeue(queue))
