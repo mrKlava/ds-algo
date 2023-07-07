@@ -173,9 +173,11 @@ class UI {
 let counter = 0
 
 const ui = new UI()
-const queue = ui.createUi()
+const queue = ui.createUi(7)
 
 /* EVENT LISTENERS */
 
 ui.enqueueBtn.addEventListener('click', () => ui.handleEnqueue(queue))
 ui.dequeueBtn.addEventListener('click', () => ui.handleDequeue(queue))
+
+console.log(ui)
