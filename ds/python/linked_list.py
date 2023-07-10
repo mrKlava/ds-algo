@@ -14,7 +14,7 @@ class LinkedList:
         self.head = None
 
 
-    def traverse(self):
+    def print_list(self):
         '''access linked list elements'''
         temp = self.head
 
@@ -157,13 +157,13 @@ linked_list.insert_at(2, fifth)
 # linked_list.delete_end()
 # linked_list.delete_at(3)
 
-linked_list.traverse()
+linked_list.print_list()
 
 print(linked_list.search(5))
 
 linked_list.sort()
 
-linked_list.traverse()
+linked_list.print_list()
 
 
 # # print out linked list
